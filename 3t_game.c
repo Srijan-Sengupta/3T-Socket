@@ -53,12 +53,13 @@ int check_winner(int board[BOARD_SIZE][BOARD_SIZE]) {
 
 void display_board(int board[3][3]) {
     for (int i = 0; i < 3; i++) {
-        printf("\t___\t\t___\t\t___\n");
+        printf(" --- --- ---\n");
+        printf("|");
         for (int j = 0; j < 3; j++) {
             const char disp = (board[i][j] == 0) ? ' ' : ((board[i][j] == 1) ? 'X' : 'O');
-            printf("|\t%c\t|", disp);
+            printf(" %c |", disp);
         }
         printf("\n");
     }
-    printf("\t___\t\t___\t\t___\n");
+    printf(" --- --- ---\n");
 }
