@@ -45,8 +45,6 @@ int main(int argc, char *argv[]) {
     signal(SIGINT, INT_handler);
     signal(SIGTERM, INT_handler);
 
-    //Multithreading
-
     // Accept cons
     while (1) {
         for (int i = 0; i < 2; i++) {
