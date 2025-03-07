@@ -10,4 +10,8 @@
 #define CLIENT_HPP "127.0.0.1"
 #endif
 
+int sock;
+
+void INT_quit_handler(int arg);
+
 #endif //CLIENT_H

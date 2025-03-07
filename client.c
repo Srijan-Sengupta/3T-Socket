@@ -4,6 +4,7 @@
 
 #include "client.h"
 
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -19,9 +20,7 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "Usage: %s <addr> <port>\n", argv[0]);
         exit(1);
     }
-
     struct sockaddr_in server_addr;
-    int sock;
     char buffer[6];
     sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock < 0) {
@@ -50,14 +49,15 @@ int main(int argc, char *argv[]) {
     fflush(stdin);
 
     recv(sock, buffer, sizeof(buffer), 0);
-
+    signal(SIGINT, INT_quit_handler);
+    signal(SIGTERM, INT_quit_handler);
     int board[BOARD_SIZE][BOARD_SIZE] = {
         {0, 0, 0},
         {0, 0, 0},
         {0, 0, 0}
     };
     const int player = strtol(buffer, NULL, 10);
-    int playing = 0;
+    int playing = 0, winner = 0;
     int val = 2;
     printf("You are playing as %d\n", player);
     display_board(board);
@@ -74,6 +74,10 @@ int main(int argc, char *argv[]) {
         }else {
             recv(sock, buffer, sizeof(buffer), 0);
             printf("%s\n", buffer);
+            if (buffer[0] == 'q') {
+                winner = player+1;
+                break;
+            }
             inp = strtol(buffer, NULL, 10);
         }
 
@@ -89,12 +93,20 @@ int main(int argc, char *argv[]) {
             break;
         }
     }
-    if (check_winner(board) == 0) {
+    winner = (winner)? winner:check_winner(board);
+    if (winner == 0) {
         printf("It was a draw!\n");
-    }else if (check_winner(board) == player+1) {
+    }else if (winner == player+1) {
         printf("You won!\n");
     }else {
         printf("You lost!\n");
     }
     close(sock);
+}
+
+void  INT_quit_handler(int arg) {
+    send(sock,  "quit", 6, 0);
+    printf("You lost!");
+    close(sock);
+    exit(1);
 }
