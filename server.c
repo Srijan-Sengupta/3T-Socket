@@ -56,7 +56,7 @@ int main(int argc, char *argv[]) {
             }
             int one = 1;
             setsockopt(clientfd[i], IPPROTO_TCP, TCP_NODELAY, &one, sizeof(one));
-            send(clientfd[i], "wait", 4, 0);
+            send(clientfd[i], "wait", 6, 0);
             printf("Client %d connected\n", i);
         }
         int *arr = malloc(sizeof(int) * 2);

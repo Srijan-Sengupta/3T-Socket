@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
     struct sockaddr_in server_addr;
-    char buffer[6];
+    char buffer[6] = {};
     sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock < 0) {
         perror("socket creation failed");
